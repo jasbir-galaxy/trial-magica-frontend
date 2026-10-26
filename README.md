@@ -34,3 +34,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Browser connection
+
+Set `NEXT_PUBLIC_API_BASE_URL=http://localhost:3001` in `.env.local` for local development.
+In Vercel Production, use `https://trial-magica-backend.vercel.app` and rebuild/redeploy.
+Use an origin without a trailing slash. Start the backend on port 3001 and this app on port 3000.
+Visit `/connection` to verify browser-to-backend CORS, loading, success, and retry states.
+The page checks HTTP availability only; it does not test authentication or the database.
+
+`src/generated/health.ts` is exported from the backend's authoritative Zod contract.
+Regenerate it using the backend's `scripts/export-contracts.mjs`; do not edit it manually.
+API requests live in `src/services`, with a timeout, cancellation, and runtime response validation.
+Run `pnpm test`, `pnpm typecheck`, and `pnpm lint` before publishing.
