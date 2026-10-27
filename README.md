@@ -47,3 +47,11 @@ The page checks HTTP availability only; it does not test authentication or the d
 Regenerate it using the backend's `scripts/export-contracts.mjs`; do not edit it manually.
 API requests live in `src/services`, with a timeout, cancellation, and runtime response validation.
 Run `pnpm test`, `pnpm typecheck`, and `pnpm lint` before publishing.
+
+## Authentication verification
+
+Sign in, then open `/connection`. The account check obtains a Clerk session token on each request and calls the protected backend `/api/app/v1/me`.
+The verified identity must match the signed-in frontend user. Session changes dispose of the account query cache and cancel in-flight requests.
+Clerk tokens stay in request headers, never query keys, local storage, or application logs.
+The backend and frontend must use the same Clerk application and instance. Configure keys separately in each Vercel project; never commit secrets.
+The public health check remains available while signed out.

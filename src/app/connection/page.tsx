@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { AuthCheck } from "./auth-check";
 import { ConnectionCheck } from "./connection-check";
 
 export default function ConnectionPage() {
@@ -6,6 +8,7 @@ export default function ConnectionPage() {
       <h1 className="text-2xl font-semibold">Connection check</h1>
       <p className="text-muted-foreground">Check whether this app can reach the service.</p>
       <ConnectionCheck />
+      <Suspense fallback={<p role="status">Loading account…</p>}><AuthCheck /></Suspense>
     </main>
   );
 }
