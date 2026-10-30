@@ -1,20 +1,10 @@
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
-import Link from "next/link";
-import { Suspense } from "react";
+"use client";
+
+import { UserButton } from "@clerk/nextjs";
+import styles from "./chats/chats.module.css";
 
 export function AuthControls() {
-  return (
-    <header className="flex items-center justify-between border-b px-6 py-4">
-      <Link href="/" className="font-semibold">Magica Trial</Link>
-      <nav aria-label="Account" className="flex items-center gap-4">
-        <Suspense fallback={<span role="status">Loading account…</span>}>
-          <Show when="signed-out">
-            <SignInButton />
-            <SignUpButton />
-          </Show>
-          <Show when="signed-in"><UserButton /></Show>
-        </Suspense>
-      </nav>
-    </header>
-  );
+  return <div className={styles.accountControls} aria-label="Account">
+    <UserButton showName appearance={{ elements: { rootBox: { width: "100%" }, userButtonTrigger: { width: "100%", justifyContent: "space-between", flexDirection: "row-reverse", padding: "4px 8px", boxShadow: "none" }, userButtonOuterIdentifier: { fontFamily: "inherit", fontSize: "13px" } } }} />
+  </div>;
 }
