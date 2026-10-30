@@ -1,0 +1,14 @@
+import { z } from "zod";
+import { ApiKeyListSchema, CreatedApiKeySchema, CreateApiKeySchema, AcknowledgementSchema } from "@/generated/public-api";
+import { WebhookEndpointListSchema, CreatedWebhookSchema, CreateWebhookSchema, WebhookDeliveryPageSchema } from "@/generated/webhooks";
+import { apiGet, apiPost, apiDelete } from "./api-client";
+type Token=()=>Promise<string|null>;
+const keyPath="/api/app/v1/api-keys", hookPath="/api/app/v1/webhooks";
+export const integrationKeys={all:(userId:string)=>["integrations",userId] as const,keys:(userId:string)=>["integrations",userId,"keys"] as const,hooks:(userId:string)=>["integrations",userId,"hooks"] as const,deliveries:(userId:string,id:string)=>["integrations",userId,"deliveries",id] as const};
+export const listKeys=(token:Token,signal?:AbortSignal)=>apiGet(keyPath,ApiKeyListSchema,signal,token);
+export const createKey=(input:z.input<typeof CreateApiKeySchema>,token:Token,signal?:AbortSignal)=>apiPost(keyPath,CreatedApiKeySchema,CreateApiKeySchema.parse(input),token,signal);
+export const revokeKey=(id:string,token:Token,signal?:AbortSignal)=>apiDelete(`${keyPath}/${z.uuid().parse(id)}`,AcknowledgementSchema,token,signal);
+export const listHooks=(token:Token,signal?:AbortSignal)=>apiGet(hookPath,WebhookEndpointListSchema,signal,token);
+export const createHook=(input:z.input<typeof CreateWebhookSchema>,token:Token,signal?:AbortSignal)=>apiPost(hookPath,CreatedWebhookSchema,CreateWebhookSchema.parse(input),token,signal);
+export const disableHook=(id:string,token:Token,signal?:AbortSignal)=>apiDelete(`${hookPath}/${z.uuid().parse(id)}`,AcknowledgementSchema,token,signal);
+export const listDeliveries=(id:string,token:Token,cursor?:string,signal?:AbortSignal)=>apiGet(`${hookPath}/${z.uuid().parse(id)}/deliveries?${new URLSearchParams({limit:"20",...(cursor?{cursor}:{})})}`,WebhookDeliveryPageSchema,signal,token);
