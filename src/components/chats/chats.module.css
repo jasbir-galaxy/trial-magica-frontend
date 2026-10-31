@@ -204,3 +204,14 @@
 .approvalSettings ol { list-style: decimal; padding-left: 20px; }.approvalSettings li + li { margin-top: 6px; }
 @media (hover: hover) and (pointer: fine) { .planToggle:hover:not(:disabled) { background: #eee; } }
 @media (max-width: 700px) { .planToggle { min-height: 36px; } }
+
+.reasoning, .usageDetails { margin-block: 8px; color: var(--muted-foreground); font-size: 12px; line-height: 1.6; }
+.reasoning > summary, .usageDetails > summary { cursor: pointer; width: fit-content; }
+.reasoning > summary:focus-visible, .usageDetails > summary:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 3px; }
+.reasoning .markdown { margin-top: 8px; font-size: 13px; }
+.citation { margin-block: 8px; font-size: 12px; overflow-wrap: anywhere; }
+.citation a { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+.usageDetails dl { display: grid; gap: 4px; margin-block: 8px; }
+.usageDetails dl > div { display: flex; gap: 12px; }
+.usageDetails dd { margin: 0; overflow-wrap: anywhere; }
+.assetAudio { display: block; width: 100%; margin-block: 12px; }

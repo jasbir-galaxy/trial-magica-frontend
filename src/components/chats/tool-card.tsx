@@ -11,6 +11,7 @@ const labels: Record<ToolInvocation["status"], string> = {
 };
 type Asset = NonNullable<ToolInvocation["output"]>["assets"][number];
 function MediaPreview({ asset, label }: { asset: Asset; label: string }) {
+  if (asset.kind === "audio") return <audio src={asset.url} aria-label={label} controls preload="metadata" className={styles.assetAudio} />;
   return asset.kind === "image" ? <Image unoptimized src={asset.url} alt={label} width={asset.width ?? 768} height={asset.height ?? 768} className={styles.assetImage} /> :
     <video src={asset.url} aria-label={label} controls preload="metadata" className={styles.assetImage} />;
 }

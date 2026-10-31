@@ -4,30 +4,27 @@ import dynamic from "next/dynamic";
 import { PlanModeToggle } from "./plan-mode-toggle";
 import { PLAN_MODE } from "@/generated/plans";
 import { MessageTimeline } from "./message-timeline";
-import { MessageMarkdown } from "./message-markdown";
+import { MessageBody } from "./message-body";
 import Image from "next/image";
 import { ArrowUp, Square, LoaderCircle } from "lucide-react";
 import { useStore } from "zustand";
 import { createUploadDraft } from "@/uploads/draft";
 import { resolveAttachments, uploadKeys } from "@/services/uploads";
-import { AttachmentPreview } from "./attachment-preview";
 import { CreditBalance } from "./credit-balance";
 import { useAuth } from "@clerk/nextjs";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRealtimeRun, useRealtimeStream } from "@trigger.dev/react-hooks";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MAX_TEXT_LENGTH, type Message } from "@/generated/chats";
 import { FREE_CHAT_MODEL, isActiveRun, RunMetadataSchema, TEXT_STREAM_ID, TEXT_STREAM_TIMEOUT_SECONDS, TextFrameSchema, type Run, type Realtime, type SendTurn } from "@/generated/runs";
 import { latestTurn, realtimeToken, runKeys, sendTurn, stopTurn } from "@/services/runs";
 import { ApiError } from "@/services/api-client";
 import { chatKeys } from "./query-keys";
-import { ToolCard } from "./tool-card";
 import { COMPOSER_USAGE_LABEL, formatCredits } from "@/generated/tools";
 import styles from "./chats.module.css";
 
 const AttachmentComposer = dynamic(() => import("./attachment-composer"), { ssr: false });
 
-type Frame = { sequence: number; text: string; content?: Message["content"] };
 function LiveReply({ run, access, refresh, complete }: { run: Run; access: Realtime; refresh: () => Promise<string>; complete: () => void }) {
   const stream = useRealtimeStream<unknown>(access.runId, TEXT_STREAM_ID, {
     accessToken: access.accessToken, refreshAccessToken: refresh, from: "latest", maxParts: 1, throttleInMs: 80, timeoutInSeconds: TEXT_STREAM_TIMEOUT_SECONDS,
@@ -45,18 +42,6 @@ function LiveReply({ run, access, refresh, complete }: { run: Run; access: Realt
       progress.success && ["writing", "working"].includes(progress.data.step) ? "Working…" : "Thinking…"}</p>
   </>;
 }
-const MessageBody = memo(function MessageBody({ message, frame }: { message: Message; frame?: Frame }) {
-  const content: Message["content"] = frame?.content ?? (frame ? (frame.text ? [{ type: "text", text: frame.text }] : []) : message.content);
-  const tools = new Map(message.tools?.map(tool => [tool.id, tool]));
-  const attachments = new Map(message.attachments?.map(file => [file.id, file]));
-  return <>
-    {content.map((block, index) => block.type === "text" ? (message.role === "assistant" ? <MessageMarkdown key={index} text={block.text} /> : <p key={index} className={styles.messageText}>{block.text}</p>) :
-      block.type === "attachment" ? (attachments.has(block.attachmentId) ? <AttachmentPreview key={block.attachmentId} file={attachments.get(block.attachmentId)!} /> : <p key={block.attachmentId}>Attachment unavailable. Reload to try again.</p>) :
-      tools.has(block.invocationId) ? <ToolCard key={block.invocationId} tool={tools.get(block.invocationId)!} /> : <p key={block.invocationId} role="status" className={styles.hint}>Loading tool…</p>)}
-    {message.error ? <p className={styles.error}>{message.error}</p> : message.status === "failed" ? <p className={styles.error}>This reply could not finish. Please try again.</p> :
-      message.status === "cancelled" ? <p className={styles.hint}>This reply was stopped.</p> : null}
-  </>;
-});
 
 export function TurnWorkspace({ chatId, messages, hasOlder = false }: { chatId: string; messages: Message[]; hasOlder?: boolean }) {
   const { userId, getToken } = useAuth();

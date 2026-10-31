@@ -41,3 +41,12 @@ it("renders saved text guidance with the generic card and escapes its content", 
   expect(screen.queryByRole("img")).not.toBeInTheDocument();
   expect(screen.getByText("0M credits")).toBeVisible();
 });
+
+it("renders saved generated audio with accessible controls through the generic asset renderer", () => {
+  const audio = ToolInvocationSchema.parse({ ...tool, output: { credits: 0, assets: [{ kind: "audio", url: "https://example.com/generated.wav" }] } });
+  render(<ToolCard tool={audio} />);
+  const player = screen.getByLabelText("Crop Image result 1");
+  expect(player.tagName).toBe("AUDIO");
+  expect(player).toHaveAttribute("controls");
+  expect(player).toHaveAttribute("preload", "metadata");
+});
