@@ -24,6 +24,9 @@ uses locally bundled reference fonts; see `public/brand/README.md` for provenanc
 
 Run `pnpm test`, `pnpm typecheck`, `pnpm lint` and `pnpm build`. UI fixtures exercise
 failure behavior; they do not replace real provider and durable-worker checks.
+Run `pnpm test:e2e` for live browser acceptance; see the
+[browser guide](docs/guides/browser-acceptance.md) for isolated Clerk setup, hosted
+execution, coverage and artifact handling.
 
 ## Browser connection
 
@@ -102,7 +105,8 @@ a rebuild. Backend media, database, worker, object-storage, and webhook credenti
 must never be added to this repository's environment.
 
 Branch previews require their own backend/environment configuration; they are not
-automatically allowed to call the production API. Before submission, repeat the
-signed-in chat, reload recovery, upload, approval, media, and webhook acceptance
-against the hosted app and record the demo. The concurrent-turn load target and
-complete browser/device regression suite remain unverified.
+automatically allowed to call the production API. Hosted sign-in, chat management,
+idempotent send recovery, approvals and cancellation are covered by the browser
+suite. Before submission, also complete the remaining upload and webhook checks,
+review the backend hosted-media evidence, and record the demo. The concurrent-turn
+load target and complete browser/device regression suite remain unverified.
