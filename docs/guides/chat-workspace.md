@@ -85,9 +85,9 @@ Free-router responses can vary in quality and availability; no paid fallback is 
 
 ## Media results
 
-Backend-generated contracts define ordered text/tool anchors, invocation details and image/video assets. Tool labels and validated results come from the backend registry. Owned history reads hydrate the cards; a realtime frame carries ordered content, while bounded REST polling refreshes tool state and survives reconnects. Polling continues for submitted media after a reply stops because accepted work may still finish.
+Backend-generated contracts define ordered text/tool anchors, invocation details and image/video/audio assets. Tool labels and validated results come from the backend registry. Owned history reads hydrate the cards; a realtime frame carries ordered content, while bounded REST polling refreshes tool state and survives reconnects. Polling continues for submitted media after a reply stops because accepted work may still finish.
 
-Cards expose pending/running/completed/failed/cancelled/unresolved states, input/output details, elapsed time and M-credit usage. Native dialogs provide preview focus management and Escape dismissal. Closing a preview unmounts its media so video playback stops. The generic reply retry button is limited to text-only turns; a media follow-up can reuse the saved results without silently rerunning a whole paid turn.
+Cards expose pending/running/completed/failed/cancelled/unresolved states, input/output details, elapsed time and M-credit usage. Native dialogs provide preview focus management and Escape dismissal. Closing a preview unmounts its media so audio/video playback stops. The generic reply retry button is limited to text-only turns; a media follow-up can reuse the saved results without silently rerunning a whole paid turn.
 
 Keep MAGICA_API_KEY in the backend/worker only. The frontend has no provider key or direct media execution calls. Live acceptance requires the trial key; fixture previews and unit tests do not prove real generation success.
 
@@ -113,8 +113,7 @@ remain accessible. Text and media growth follow the latest reply only while the
 reader stays near the bottom. Generated media opens in a side preview with
 native dialog focus handling; the media picker retains its separate dialog.
 
-This is a visual foundation, not full pixel-fidelity acceptance. Remaining work
-includes richer reasoning/citation blocks and
+This is a visual foundation, not full pixel-fidelity acceptance. Remaining work includes
 comparison of active streaming/approval states with the reference. Public
 deployment remains separate from local checks.
 
@@ -195,4 +194,26 @@ mounted while polling preserved the reading position. At 390×844, there was no
 horizontal overflow, the composer stayed visible, and approving the plan produced
 “Virtualized live reply verified.” The reply followed to within 1px of the bottom.
 Trigger run `run_06gorlsf91n87i9hjb2kce3ia2` completed successfully. The normal
-desktop viewport was restored afterward. These changes are local, not deployed.
+desktop viewport was restored afterward. This record describes local acceptance; hosted acceptance must be recorded separately.
+
+
+## Rich replies and audio results
+
+The backend-generated `content.ts` contract adds ordered measured thinking,
+provider reasoning/summary, source citations and zero-credit model usage. Details
+are expandable; provider text uses the existing safe Markdown renderer. A stopped
+worker cannot leave a terminal message's thinking timer running. Realtime snapshots
+replace earlier snapshots and reconcile with the saved ordered message. Old
+plain-text frames and text/tool/attachment records remain supported. Generated
+audio uses native controls in both the result card and artifact preview.
+
+Deploy this frontend before the matching rich-message backend and worker. Reload
+already-open tabs before acceptance. Once new blocks exist, rollback must retain
+these generated schemas/readers; an old strict reader would reject rich history.
+No frontend schema migration or additional paid provider is introduced.
+
+On October 31, 2026, the real local free-model turn in chat
+`bb9c005a-ad4e-4f09-b760-e676a46197f6` rendered reasoning, an actual model,
+token counts, 0M credits and a 2.7-second thinking duration. Reload retained the
+same reply and blocks. The 79-test UI suite passed; audio uses a fixture, not a
+claim of an additional live generation integration. Hosted acceptance is pending.

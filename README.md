@@ -76,6 +76,13 @@ survive reload and support decline, expiry and stop; later media credit reviews
 still apply. See the workspace guide for verification and current limitations.
 
 
+## Rich replies
+
+Ordered reasoning, source citations, thinking duration and model usage survive
+streaming and reloads. Generated audio uses native playback controls. Deploy this
+reader before the matching backend and worker; retain it during execution rollback.
+See the workspace guide for live verification and compatibility limits.
+
 ## Long conversations
 
 Message history is virtualized with measured row heights, stable older-page
